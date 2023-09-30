@@ -1,5 +1,4 @@
 require("dotenv").config()
-let process = require("process")
 
 let PORT = process.env.PORT
 let MONGODB_URI = process.env.MONGODB_URI
