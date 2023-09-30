@@ -1,11 +1,13 @@
 const express = require("express")
 const cors = require("cors")
-const config = require("./utils/config")
-const middleware = require("./utils/middleware")
-const logger = require("./utils/logger")
-const personsRouter = require("./controllers/persons")
 const mongoose = require("mongoose")
 
+const blogRouter = require("./controllers/blogController")
+const middleware = require("./utils/middleware")
+const logger = require("./utils/logger")
+const config = require("./utils/config")
+
+//const http = require('http')
 
 const url = config.MONGODB_URI
 
@@ -28,8 +30,7 @@ app.use(express.static("dist"))
 app.use(express.json())
 app.use(middleware.requestLogger)
 
-
-app.use("/api/persons", personsRouter)
+app.use("/api/blogs", blogRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)

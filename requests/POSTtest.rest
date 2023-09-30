@@ -1,8 +1,10 @@
-POST  http://localhost:3001/api/persons
+POST  http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
-    "name": "Ja",
-    "number": "0400123123"
+    "title": "Mongo",
+    "author": "Kerkko",
+    "url": "testi url",
+    "likes": 2
 }
     

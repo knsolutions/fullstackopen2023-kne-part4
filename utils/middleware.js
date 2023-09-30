@@ -1,7 +1,5 @@
+const logger = require("./logger")
 const morgan = require("morgan")
-const logger = require("./utils/logger")
-
-
 
 
 morgan.token("postdata", (req) => {
@@ -16,6 +14,7 @@ const morganFormat = ":method :url :status :res[content-length] - :response-time
 morgan(morganFormat, {
     skip: (req) => req.method !== "POST"
 })
+
 
 const requestLogger = (request, response, next) => {
     logger.info("Method:", request.method)
