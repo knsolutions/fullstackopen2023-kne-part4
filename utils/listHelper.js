@@ -58,9 +58,9 @@ const mostBlogs = (blogs) => {
     }
 
     const authors = _.countBy(blogs, "author")
-    console.log("authors: ", authors)
+    //console.log("authors: ", authors)
     const authorWithMostBlogs = Object.keys(authors).reduce((a, b) => authors[a] > authors[b] ? a : b)
-    console.log("authorWithMostBlogs: ", authorWithMostBlogs)
+    //console.log("authorWithMostBlogs: ", authorWithMostBlogs)
 
     return {
         author: authorWithMostBlogs,
