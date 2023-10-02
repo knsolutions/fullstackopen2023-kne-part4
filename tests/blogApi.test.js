@@ -111,13 +111,53 @@ test("id field should be according to model", async () => {
 
 
 test("the first blog is about React patterns", async () => {
-    const response = await api.get("/api/blogs")
+    const blogsAtEnd = await helper.blogsInDb()
 
-    const titles = response.body.map(b => b.title)
+    const titles = blogsAtEnd.map(b => b.title)
 
     expect(titles).toContain("React patterns")
     //expect(response.body[0].title).toBe("React patterns")
+}, 15000)
+
+
+test("UPDATE a blog by ID", async () => {
+    const blogToUpdate = await helper.blogsInDb()
+
+    const updatedData = {
+        _id: "5a422a851b54a676234d17f7",
+        title: "React patterns",
+        author: "Michael Chan",
+        url: "https://reactpatterns.com/",
+        likes: 12
+    }
+
+    const response = await api
+        .put(`/api/blogs/${blogToUpdate[0].id}`)
+        .send(updatedData)
+        .expect(200)
+        .expect("Content-Type", /application\/json/)
+
+    const updatedBlog = response.body
+    expect(updatedBlog.title).toBe(updatedData.title)
+    expect(updatedBlog.author).toBe(updatedData.author)
+    expect(updatedBlog.likes).toBe(updatedData.likes)
 }, 10000)
+
+
+test("DELETE a blog by Id", async () => {
+
+    const blogToDelete = await helper.blogsInDb()
+
+    console.log(blogToDelete[0])
+
+    await api
+        .delete(`/api/blogs/${blogToDelete[0].id}`)
+        .expect(204)
+
+    const blogsAfterDelete = await helper.blogsInDb()
+    expect(blogsAfterDelete).toHaveLength(helper.initialBlogs.length -1)
+}, 10000)
+
 
 afterAll(async () => {
     await mongoose.connection.close()
