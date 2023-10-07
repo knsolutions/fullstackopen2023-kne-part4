@@ -1,5 +1,7 @@
 const logger = require("./logger")
 const morgan = require("morgan")
+const jwt = require("jsonwebtoken")
+const User = require("../models/userModel")
 
 
 morgan.token("postdata", (req) => {
@@ -37,10 +39,57 @@ const errorHandler = (error, request, response, next) => {
     } else if (error.name === "ValidationError") {
         console.log("Validation error")
         return response.status(400).json({ error: error.message })
+    } else if (error.name ===  "JsonWebTokenError") {
+        return response.status(400).json({ error: "token missing or invalid" })
+    } else if (error.name === "TokenExpiredError") {
+        return response.status(401).json({
+            error: "token expired"
+        })
     }
+
     next(error)
 }
 
+const tokenExtractor = (request, response, next) => {
+    const authorization = request.get("authorization")
+
+    if (authorization && authorization.startsWith("Bearer ")) {
+        request.token = authorization.replace("Bearer ", "")
+    } else {
+        request.token = null
+    }
+
+    next()
+}
+
+const userExtractor = async (request, response, next) => {
+
+    const token = request.token
+
+    if (!token) {
+        return next()
+    }
+
+    try {
+        const decodedToken = jwt.verify(token, process.env.SECRET)
+
+        if (!decodedToken.id) {
+            return next()
+        }
+
+        const user = await User.findById(decodedToken.id)
+        if (!user) {
+            return next()
+        }
+
+        response.user = user
+    } catch (error) {
+        return next()
+    }
+
+    next()
+}
+
 module.exports = {
-    unknownEndpoint, errorHandler, requestLogger
+    unknownEndpoint, errorHandler, requestLogger, tokenExtractor, userExtractor
 }

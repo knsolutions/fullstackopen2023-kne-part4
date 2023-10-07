@@ -1,5 +1,6 @@
 POST  http://localhost:3001/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImtvbmVtaWVzIiwiaWQiOiI2NTIxMDFlMGI5ZjA5NjBjM2M5NGEzOTAiLCJpYXQiOjE2OTY2NjI3MDh9.nJke-ElsD-YEOk52vbAj2R2VY2QpDUTui_bthdGCjB8
 
 {
     "title": "Mongo",
@@ -7,4 +8,4 @@ Content-Type: application/json
     "url": "testi url",
     "likes": 2
 }
-    
+ 
